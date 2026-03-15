@@ -1,0 +1,13 @@
+langchain
+langchain-groq
+langchain-core
+langgraph
+langchain-community
+tavily-python
+python-dotenv
+fastapi
+uvicorn
+chromadb
+python-docx
+openpyxl
+pdfplumber
