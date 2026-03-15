@@ -1,0 +1,7 @@
+
+    Aditya Kumar Gupta — AI Automation Engineer
+    3+ years at Cognizant in MFT/EDI and B2B integration.
+    AI Projects: MFT Operations Agent (LangGraph, FastAPI, ChromaDB, Docker)
+    MFT Email Responder (RAG, ChromaDB, Microsoft Graph API)
+    Skills: Python, LangGraph, FastAPI, ChromaDB, RAG, Docker, Git
+    
