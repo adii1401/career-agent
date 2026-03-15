@@ -13,7 +13,6 @@ An AI-powered job application intelligence system. Paste a job description, uplo
 
 🔗 **Live:** https://huggingface.co/spaces/aditya1401/career-agent
 
----
 
 ## Architecture
 
