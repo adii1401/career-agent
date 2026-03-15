@@ -10,11 +10,14 @@ from agents.interview_prep import generate_interview_prep
 load_dotenv()
 
 def extract_company_name(jd_text: str) -> str:
-    lines = jd_text.strip().split("\n")
-    for line in lines[:5]:
-        if line.strip():
-            return line.strip()[:50]
-    return "the company"
+    from langchain_groq import ChatGroq
+    from langchain_core.messages import HumanMessage, SystemMessage
+    llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
+    response = llm.invoke([
+        SystemMessage(content="Extract only the company name from this job description. Return just the company name, nothing else."),
+        HumanMessage(content=jd_text[:500])
+    ])
+    return response.content.strip()[:60]
 
 def run_career_agent(jd_text: str, resume_text: str = None) -> dict:
     if not resume_text:
