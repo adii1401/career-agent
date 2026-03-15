@@ -1,7 +1,35 @@
-
-    Aditya Kumar Gupta — AI Automation Engineer
-    3+ years at Cognizant in MFT/EDI and B2B integration.
-    AI Projects: MFT Operations Agent (LangGraph, FastAPI, ChromaDB, Docker)
-    MFT Email Responder (RAG, ChromaDB, Microsoft Graph API)
-    Skills: Python, LangGraph, FastAPI, ChromaDB, RAG, Docker, Git
-    
+ADITYA KUMAR GUPTA
+AI Automation Engineer  |  B2B Integration  |  MFT  |  EDI  |  Python
+gadityakumar44@gmail.com  |  +91 9504246925  |  Bengaluru, India  |  LinkedIn
+PROFESSIONAL SUMMARY
+Software Engineer with 3+ years at Cognizant in enterprise B2B integration, MFT, and EDI. Worked on Seeburger BIS for a major US insurance client, built Python automation that saved 20+ hours of manual work per person per week, and shipped two AI-powered MFT automation tools using LLM, RAG, LangGraph, and FastAPI. Looking to move into AI Automation Engineering full time.
+AI PROJECTS
+MFT Operations Agent
+Python  |  LangGraph  |  LLaMA 3.3 (Groq)  |  ChromaDB  |  FastAPI  |  Docker  |  Hugging Face Spaces
+GitHub: github.com/adii1401/mft-operations-agent
+Live Demo: huggingface.co/spaces/aditya1401/mft-operations-agent
+AI chat agent for MFT operations support — resolves TP lookups, transfer failures, SLA breaches, and escalations using 8 LangChain tools backed by live Excel data and ChromaDB vector search.
+Built SLA breach detector with protocol-based thresholds (SFTP=4h, AS2=2h, FTPS=6h) and onboarding tracker reading live from Excel — replacing hardcoded data with file-driven operations.
+Deployed on Hugging Face Spaces via Docker; ChromaDB embedding model pre-downloaded at build time to avoid cold start failures. Reduces token usage ~80% vs full-doc loading via RAG.
+MFT Support Email Responder
+Python  |  LLaMA 3.3 (Groq)  |  ChromaDB  |  RAG  |  Microsoft Graph API  |  MSAL  |  SQLite  |  Streamlit
+GitHub: github.com/adii1401/mft-email-responder
+Live Demo: mft-email-responder-gzxs4yes6ut8dvdruafyue.streamlit.app
+Reads unread Outlook emails via Microsoft Graph API, retrieves relevant SOPs through semantic search (ChromaDB + RAG), and drafts a reply using LLaMA 3.3 — reducing response time from minutes to seconds.
+Auto-identifies the responsible Job Owner from the TP master list and CC's them on every reply — eliminating manual lookup.
+Follow-up tracker backed by SQLite with SLA-based deadlines, overdue alerts, and SQL console. Deployed on Streamlit Cloud.
+PROFESSIONAL EXPERIENCE
+Promoted from Program Analyst based on consistent technical delivery.
+Configuring and managing Seeburger BIS MFT for Hartford insurance domain across AS2, SFTP, FTPS, and OFTP protocols.
+Building Python-based automation tools to reduce manual effort in MFT configuration and operations.
+Configured Seeburger BIS MFT solutions for Hartford, managing file transfer setups for 50+ trading partners across AS2, FTP/SFTP, and OFTP.
+Built Python scripts that automated MFT artifact generation and config tasks, saving 20+ hours of manual work per person per week.
+Developed BIC mappings and EDI data transformations for trading partner onboardings in the insurance domain.
+Maintained zero SLA breaches on critical B2B file transfers across production environment.
+TECHNICAL SKILLS
+EDUCATION
+Cochin University of Science and Technology (CUSAT)  |  CGPA: 8.8 / 10.0
+CERTIFICATIONS
+Google Professional Data Analytics — Coursera (Dec 2022)
+Cognizant Certified: Core Java, ANSI SQL, IBM Sterling EDI, Seeburger MFT
+SQL for Data Analysis — LinkedIn Learning (Oct 2022)

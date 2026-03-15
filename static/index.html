@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareerAgent</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #0f1117; color: #e0e0e0; min-height: 100vh; }
+  .header { background: #1a1d2e; padding: 20px 40px; border-bottom: 1px solid #2d3047; }
+  .header h1 { color: #7c83fd; font-size: 1.8rem; }
+  .header p { color: #888; font-size: 0.9rem; margin-top: 4px; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 30px 20px; }
+  .card { background: #1a1d2e; border: 1px solid #2d3047; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+  .card h2 { color: #7c83fd; margin-bottom: 16px; font-size: 1.1rem; }
+  .resume-status { display: flex; align-items: center; gap: 12px; padding: 12px; background: #0f1117; border-radius: 8px; margin-bottom: 16px; }
+  .status-dot { width: 10px; height: 10px; border-radius: 50%; background: #ff4d4d; }
+  .status-dot.active { background: #4caf50; }
+  .upload-area { border: 2px dashed #2d3047; border-radius: 8px; padding: 24px; text-align: center; cursor: pointer; transition: border-color 0.2s; }
+  .upload-area:hover { border-color: #7c83fd; }
+  .upload-area input { display: none; }
+  label.upload-btn { cursor: pointer; color: #7c83fd; font-weight: 600; }
+  textarea { width: 100%; background: #0f1117; border: 1px solid #2d3047; border-radius: 8px; color: #e0e0e0; padding: 14px; font-size: 0.9rem; resize: vertical; font-family: inherit; }
+  textarea:focus { outline: none; border-color: #7c83fd; }
+  .btn { background: #7c83fd; color: white; border: none; padding: 12px 28px; border-radius: 8px; font-size: 1rem; cursor: pointer; font-weight: 600; transition: background 0.2s; }
+  .btn:hover { background: #6570fc; }
+  .btn:disabled { background: #444; cursor: not-allowed; }
+  .btn-outline { background: transparent; border: 1px solid #7c83fd; color: #7c83fd; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+  .progress { display: none; margin-top: 16px; }
+  .progress-steps { display: flex; flex-direction: column; gap: 8px; }
+  .step { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #0f1117; border-radius: 8px; font-size: 0.9rem; }
+  .step-icon { font-size: 1.1rem; }
+  .step.active { border-left: 3px solid #7c83fd; }
+  .step.done { border-left: 3px solid #4caf50; }
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .tab { padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; background: #0f1117; border: 1px solid #2d3047; color: #888; transition: all 0.2s; }
+  .tab.active { background: #7c83fd; color: white; border-color: #7c83fd; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .result-box { background: #0f1117; border-radius: 8px; padding: 20px; white-space: pre-wrap; font-size: 0.88rem; line-height: 1.7; max-height: 600px; overflow-y: auto; }
+  .results-section { display: none; }
+  .error { color: #ff6b6b; background: #2d1a1a; padding: 12px; border-radius: 8px; margin-top: 12px; }
+  .success-msg { color: #4caf50; font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🤖 CareerAgent</h1>
+  <p>AI-powered job application intelligence — research, analyze, tailor, prepare</p>
+</div>
+
+<div class="container">
+
+  <!-- Resume Section -->
+  <div class="card">
+    <h2>📄 Your Resume</h2>
+    <div class="resume-status">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">Checking resume...</span>
+      <button class="btn-outline" onclick="document.getElementById('fileInput').click()" style="margin-left:auto">Upload New Resume</button>
+    </div>
+    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+      <input type="file" id="fileInput" accept=".pdf,.docx,.doc,.txt" onchange="uploadResume(this)">
+      <label class="upload-btn">📁 Click to upload resume</label>
+      <p style="color:#666; font-size:0.8rem; margin-top:8px">PDF, DOCX, or TXT supported</p>
+    </div>
+    <p id="uploadMsg" style="margin-top:10px; font-size:0.85rem;"></p>
+  </div>
+
+  <!-- JD Section -->
+  <div class="card">
+    <h2>💼 Job Description</h2>
+    <textarea id="jdInput" rows="10" placeholder="Paste the job description here..."></textarea>
+    <div style="margin-top:16px; display:flex; align-items:center; gap:16px;">
+      <button class="btn" onclick="analyze()" id="analyzeBtn">🚀 Analyze</button>
+      <span id="analyzeMsg" style="font-size:0.85rem; color:#888;"></span>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress" id="progress">
+      <div class="progress-steps">
+        <div class="step" id="step1"><span class="step-icon">🔍</span> Researching company...</div>
+        <div class="step" id="step2"><span class="step-icon">📋</span> Analyzing job description...</div>
+        <div class="step" id="step3"><span class="step-icon">📊</span> Running gap analysis...</div>
+        <div class="step" id="step4"><span class="step-icon">✏️</span> Tailoring resume...</div>
+        <div class="step" id="step5"><span class="step-icon">🎯</span> Generating interview prep...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="card results-section" id="resultsSection">
+    <h2>📊 Results</h2>
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('company')">🏢 Company</div>
+      <div class="tab" onclick="showTab('jd')">📋 JD Analysis</div>
+      <div class="tab" onclick="showTab('gap')">📊 Gap Analysis</div>
+      <div class="tab" onclick="showTab('resume')">✏️ Tailored Resume</div>
+      <div class="tab" onclick="showTab('interview')">🎯 Interview Prep</div>
+    </div>
+    <div class="tab-content active" id="tab-company"><div class="result-box" id="result-company"></div></div>
+    <div class="tab-content" id="tab-jd"><div class="result-box" id="result-jd"></div></div>
+    <div class="tab-content" id="tab-gap"><div class="result-box" id="result-gap"></div></div>
+    <div class="tab-content" id="tab-resume"><div class="result-box" id="result-resume"></div></div>
+    <div class="tab-content" id="tab-interview"><div class="result-box" id="result-interview"></div></div>
+  </div>
+
+</div>
+
+<script>
+async function checkResumeStatus() {
+  const res = await fetch('/resume-status');
+  const data = await res.json();
+  const dot = document.getElementById('statusDot');
+  const text = document.getElementById('statusText');
+  if (data.exists) {
+    dot.classList.add('active');
+    text.textContent = 'Resume loaded ✓';
+  } else {
+    text.textContent = 'No resume uploaded yet';
+  }
+}
+
+async function uploadResume(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const msg = document.getElementById('uploadMsg');
+  msg.textContent = 'Uploading...';
+  msg.className = '';
+  
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  try {
+    const res = await fetch('/upload-resume', { method: 'POST', body: formData });
+    const data = await res.json();
+    if (res.ok) {
+      msg.textContent = '✓ Resume uploaded successfully';
+      msg.className = 'success-msg';
+      checkResumeStatus();
+    } else {
+      msg.textContent = '✗ ' + data.detail;
+      msg.style.color = '#ff6b6b';
+    }
+  } catch(e) {
+    msg.textContent = '✗ Upload failed';
+    msg.style.color = '#ff6b6b';
+  }
+}
+
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function setStep(n, state) {
+  const el = document.getElementById('step' + n);
+  el.className = 'step ' + state;
+}
+
+async function analyze() {
+  const jd = document.getElementById('jdInput').value.trim();
+  if (!jd) { alert('Please paste a job description first.'); return; }
+
+  const btn = document.getElementById('analyzeBtn');
+  const msg = document.getElementById('analyzeMsg');
+  const progress = document.getElementById('progress');
+
+  btn.disabled = true;
+  btn.textContent = 'Analyzing...';
+  progress.style.display = 'block';
+  msg.textContent = 'This takes 30-60 seconds...';
+
+  // Simulate step progression
+  for (let i = 1; i <= 5; i++) setStep(i, '');
+  setStep(1, 'active');
+
+  const stepTimer = setInterval(() => {}, 1000);
+
+  try {
+    const res = await fetch('/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ jd_text: jd })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      msg.innerHTML = '<span style="color:#ff6b6b">✗ ' + (data.detail || 'Analysis failed') + '</span>';
+      return;
+    }
+
+    for (let i = 1; i <= 5; i++) setStep(i, 'done');
+
+    document.getElementById('result-company').textContent = data.company_research || '';
+    document.getElementById('result-jd').textContent = data.jd_analysis || '';
+    document.getElementById('result-gap').textContent = data.gap_analysis || '';
+    document.getElementById('result-resume').textContent = data.tailored_resume || '';
+    document.getElementById('result-interview').textContent = data.interview_prep || '';
+
+    document.getElementById('resultsSection').style.display = 'block';
+    document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+    msg.textContent = '✓ Analysis complete';
+
+  } catch(e) {
+    msg.innerHTML = '<span style="color:#ff6b6b">✗ Request failed: ' + e.message + '</span>';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🚀 Analyze';
+    clearInterval(stepTimer);
+  }
+}
+
+checkResumeStatus();
+</script>
+</body>
+</html>
